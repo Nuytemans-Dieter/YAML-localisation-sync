@@ -1,6 +1,9 @@
+package be.dezijwegel.yamllocalisation;
+
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -18,12 +21,7 @@ public class FileComparator {
 
         this.seedFileReader = seedFileReader;
 
-        InputStream inputStream = this.getClass()
-                .getClassLoader()
-                .getResourceAsStream( filePath );
-
-        if (inputStream == null)
-            throw new FileNotFoundException("File '" + filePath + "' not found!");
+        InputStream inputStream = new FileInputStream( filePath );
 
         // SnakeYAML options
         DumperOptions options = new DumperOptions();

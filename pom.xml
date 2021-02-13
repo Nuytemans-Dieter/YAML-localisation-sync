@@ -6,15 +6,35 @@
 
     <groupId>org.example</groupId>
     <artifactId>YamlLocalisation</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <build>
+        <!-- Use the project's ID as jar file name -->
+        <finalName>${project.artifactId}</finalName>
+
         <plugins>
+            <!-- Specify JDK version -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <source>8</source>
                     <target>8</target>
+                </configuration>
+            </plugin>
+            <!-- Include manifest file -->
+            <plugin>
+                <!-- Build an executable JAR -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>be.dezijwegel.yamllocalisation.YamlLocalisation</mainClass>
+                        </manifest>
+                    </archive>
                 </configuration>
             </plugin>
         </plugins>
