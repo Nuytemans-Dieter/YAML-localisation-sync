@@ -3,6 +3,7 @@ package be.dezijwegel.yamllocalisation;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 public class YamlLocalisation {
 
@@ -29,7 +30,7 @@ public class YamlLocalisation {
             return;
         }
 
-        File folder = new File("");
+        File folder = new File(".");
         File[] listOfFiles = folder.listFiles();
 
         if (listOfFiles == null)
@@ -41,13 +42,18 @@ public class YamlLocalisation {
         for (File file : listOfFiles)
         {
             String name = file.getName();
-            if (file.isFile() && name.endsWith(".yml") && !name.equalsIgnoreCase( args[0] ))
+            if (file.isFile() && name.endsWith(".yml"))
             {
-                try {
-                    FileComparator yamlFile = new FileComparator(name, seedFile);
-                    yamlFile.getnewFileContents();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+                if ( !name.equalsIgnoreCase( args[0] ) )
+                {
+                    try {
+                        FileComparator yamlFile = new FileComparator(name, seedFile);
+                        List<String> newLines = yamlFile.getnewFileContents();
+                        for (String line : newLines)
+                            System.out.println(line);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
             else
