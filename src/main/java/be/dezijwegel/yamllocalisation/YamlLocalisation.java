@@ -46,20 +46,23 @@ public class YamlLocalisation {
             {
                 if ( !name.equalsIgnoreCase( args[0] ) )
                 {
+                    System.out.println("Handling file: " + name);
                     try {
                         FileComparator yamlFile = new FileComparator(name, seedFile);
                         List<String> newLines = yamlFile.getnewFileContents();
-                        for (String line : newLines)
-                            System.out.println(line);
-                    } catch (FileNotFoundException e) {
+                        FileWriter writer = new FileWriter( newLines );
+                        writer.write( name );
+                        System.out.println("Processing " + name + " is now complete");
+                    } catch (FileNotFoundException ignored) {} catch (IOException e) {
+                        System.out.println("Error while writing to " + name + "!");
                         e.printStackTrace();
                     }
                 }
             }
-            else
-            {
-                System.out.println("Not a YAML file: " + name);
-            }
+//            else
+//            {
+//                System.out.println("Not a YAML file: " + name);
+//            }
         }
     }
 
