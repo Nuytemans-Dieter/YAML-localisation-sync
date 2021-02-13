@@ -1,5 +1,7 @@
 package be.dezijwegel.yamllocalisation;
 
+import be.dezijwegel.yamllocalisation.representer.QuotedString;
+import be.dezijwegel.yamllocalisation.representer.StringRepresenter;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
@@ -27,7 +29,7 @@ public class FileComparator {
         DumperOptions options = new DumperOptions();
         options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
 
-        this.yaml = new Yaml(options);
+        this.yaml = new Yaml(new StringRepresenter(), options);
         this.contents = yaml.load(inputStream);
     }
 
@@ -51,7 +53,11 @@ public class FileComparator {
                 {
                     String key = entry.getKey();
                     Object value = (contents.containsKey( key )) ? this.contents.get( key ) : entry.getValue();
-                    newLineContents.put( key, value );
+
+                    if (value instanceof String)
+                        newLineContents.put(key, new QuotedString( value.toString() ));
+                    else
+                        newLineContents.put( key, value );
                 }
 
                 String output = this.yaml.dump( newLineContents );
