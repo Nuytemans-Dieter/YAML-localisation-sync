@@ -1,28 +1,44 @@
 package be.dezijwegel.yamllocalisation;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
+import java.util.Map;
 
 public class FileWriter {
 
-    private final List<String> lines;
+    private final Map<String, String> content;
 
-    public FileWriter(List<String> lines)
+    public FileWriter(Map<String, String> content)
     {
-        this.lines = lines;
+        this.content = content;
     }
 
     public void write( String filePath ) throws IOException
     {
         // Empty any existing files
         BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath));
+        BufferedReader reader = new BufferedReader( new FileReader("template.yml")  );
 
-        for (String line : lines)
-        {
+        String line;
+        while ((line = reader.readLine()) != null) {
+
+            // Replace placeholders
+            String[] replaceThis = StringUtils.substringsBetween(line, "{", "}");
+            if (replaceThis != null)
+            {
+                for (String tag : replaceThis)
+                {
+                    String placeholder = "{" + tag + "}";
+                    String newString = content.get( tag ) != null ? content.get( tag ) : "";
+                    line = line.replace( placeholder, "\"" + newString + "\"" );
+                }
+            }
+
+            // Write to file
             writer.append(line);
             writer.newLine();
         }

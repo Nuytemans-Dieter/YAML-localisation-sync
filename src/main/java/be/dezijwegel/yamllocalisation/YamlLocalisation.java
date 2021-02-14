@@ -3,17 +3,25 @@ package be.dezijwegel.yamllocalisation;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class YamlLocalisation {
 
-    public static void main (String[] args)
-    {
+    public static void main (String[] args) throws FileNotFoundException {
+
         if (args.length == 0)
         {
-            System.out.println("Please include the base file as an argument");
+            System.out.println("Please provide the name of the default file as an argument");
+            System.out.println("java -jar YamlLocalisation.jar <default file>");
             return;
         }
+
+        final Set<String> ignoredFilenames = new HashSet<String>(){{
+            add( args[0] );
+            add( "template.yml" );
+        }};
 
         if (args[0].contains("/"))
         {
@@ -21,14 +29,7 @@ public class YamlLocalisation {
             return;
         }
 
-        SeedFileReader seedFile;
-        try {
-            seedFile = new SeedFileReader( args[0] );
-        } catch (IOException e) {
-            System.out.println("An error occurred while reading the seed file");
-            e.printStackTrace();
-            return;
-        }
+        YamlReader defaultFile = new YamlReader( args[0] );
 
         File folder = new File(".");
         File[] listOfFiles = folder.listFiles();
@@ -44,13 +45,13 @@ public class YamlLocalisation {
             String name = file.getName();
             if (file.isFile() && name.endsWith(".yml"))
             {
-                if ( !name.equalsIgnoreCase( args[0] ) )
+                if ( !ignoredFilenames.contains( name ) )
                 {
                     System.out.println("Handling file: " + name);
                     try {
-                        FileComparator yamlFile = new FileComparator(name, seedFile);
-                        List<String> newLines = yamlFile.getNewFileContents();
-                        FileWriter writer = new FileWriter( newLines );
+                        YamlMerger merger = new YamlMerger(defaultFile, new YamlReader( name ));
+                        Map<String, String> content = merger.getNewFileContents();
+                        FileWriter writer = new FileWriter( content );
                         writer.write( name );
                         System.out.println("Processing " + name + " is now complete");
                     } catch (FileNotFoundException ignored) {} catch (IOException e) {
@@ -59,10 +60,6 @@ public class YamlLocalisation {
                     }
                 }
             }
-//            else
-//            {
-//                System.out.println("Not a YAML file: " + name);
-//            }
         }
     }
 
