@@ -19,7 +19,6 @@ public class YamlLocalisation {
         }
 
         final Set<String> ignoredFilenames = new HashSet<String>(){{
-            add( args[0] );
             add( "template.yml" );
         }};
 
