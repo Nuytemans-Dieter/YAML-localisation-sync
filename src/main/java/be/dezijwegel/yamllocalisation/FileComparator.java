@@ -33,7 +33,7 @@ public class FileComparator {
         this.contents = yaml.load(inputStream);
     }
 
-    public List<String> getnewFileContents()
+    public List<String> getNewFileContents()
     {
         List<String> lines = new ArrayList<>();
 

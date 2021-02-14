@@ -49,7 +49,7 @@ public class YamlLocalisation {
                     System.out.println("Handling file: " + name);
                     try {
                         FileComparator yamlFile = new FileComparator(name, seedFile);
-                        List<String> newLines = yamlFile.getnewFileContents();
+                        List<String> newLines = yamlFile.getNewFileContents();
                         FileWriter writer = new FileWriter( newLines );
                         writer.write( name );
                         System.out.println("Processing " + name + " is now complete");
