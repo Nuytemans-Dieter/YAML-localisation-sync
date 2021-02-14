@@ -6,6 +6,7 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.Map;
 
 public class YamlReader {
@@ -20,7 +21,8 @@ public class YamlReader {
         options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
 
         Yaml yaml = new Yaml(new StringRepresenter(), options);
-        this.contents = yaml.load( fis );
+        Map<String, String> yamlContent = yaml.load( fis );
+        this.contents = yamlContent != null ? yamlContent : new HashMap<>();
     }
 
 
