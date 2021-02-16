@@ -1,4 +1,4 @@
-# YAML localisation syncrhonisation
+# YAML localisation synchronisation
 
 ## Introduction
 This GitHub Action uses a template YAML file to **sync changes** to all other files.
